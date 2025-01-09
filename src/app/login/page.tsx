@@ -2,9 +2,8 @@
 
 import { Input } from "@/src/app/components/ui/input"
 import { ButtonOrLink } from "@/src/app/components/ui/button"
-import { useState } from "react"
 import { useRouter } from 'next/navigation'
-import { useLogin } from "@/src/app/hooks/useLogin"
+import { LoginUser } from "@/src/lib/services/authentication/loginUser"
 import { useForm } from "@/src/app/hooks/useForm"
 
 export default function Login() {
@@ -15,7 +14,7 @@ export default function Login() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { success, data } = await useLogin(formData);
+    const { success, data } = await LoginUser(formData);
 
     if (success) {
       console.log("Inloggning lyckades:", data);

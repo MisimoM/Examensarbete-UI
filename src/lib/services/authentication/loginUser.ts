@@ -1,6 +1,6 @@
-export const useLogin = async (formData: { email: string, password: string }) => {
+export const LoginUser = async (formData: { email: string, password: string }) => {
     try {
-      const response = await fetch("https://localhost:7186/login", {
+      const response = await fetch("https://localhost:7186/auth/login", {
         method: "POST",
         credentials: 'include',
         headers: {

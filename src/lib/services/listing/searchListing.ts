@@ -1,6 +1,6 @@
-export const useLogin = async (formData: { mainLocation: string, subLocation: string, accommodationType: string }) => {
+export const SearchListing = async (formData: { mainLocation: string, subLocation: string, accommodationType: string }) => {
     try {
-      const response = await fetch("https://localhost:7186/search", {
+      const response = await fetch("https://localhost:7186/listings/search", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

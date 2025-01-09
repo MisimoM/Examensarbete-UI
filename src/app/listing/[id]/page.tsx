@@ -6,10 +6,14 @@ import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Input } from '@/src/app/components/ui/input';
 import { ButtonOrLink } from '@/src/app/components/ui/button';
+import { createBooking } from '@/src/lib/services/booking/createBooking';
+import { isLoggedIn } from '@/src/lib/services/authentication/isLoggedIn';
+import { useRouter } from 'next/navigation';
 
 export default function Listing() {
 
   const params = useParams()
+  const router = useRouter()
 
   interface Listing {
     title: string;
@@ -50,37 +54,42 @@ export default function Listing() {
     
   const totalPrice = calculateDays() * pricePerNight;
 
-  const userId = "88eece02-e933-450f-9b10-9e19fb9e9619";
-
   const handleBooking = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!startDate || !endDate || !listing) return;
 
+    const loggedInStatus = await isLoggedIn();
+    if (!loggedInStatus) {
+      router.push('/login');
+      return;
+    }
+
+    const listingId = params.id;
+    
+    if (typeof listingId !== 'string') {
+      console.error('Listing ID is invalid');
+      alert('Något gick fel vid bokningen.');
+      return;
+    }
+
     const bookingData = {
-      userId: userId,
-      listingId: params.id,
+      listingId: listingId,
       startDate: startDate,
       endDate: endDate
     };
 
-    fetch('https://localhost:7186/Bookings/Create', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(bookingData)
-    })
-      .then((response) => {
-        if (response.ok) {
-          alert('Bokning genomförd!');
-        } else {
-          alert('Något gick fel vid bokningen.');
-        }
-      })
-      .catch((err) => {
-        console.error('Error creating booking:', err);
+    try {
+      const response = await createBooking(bookingData);
+
+      if (response.ok) {
+        alert('Bokning genomförd!');
+      } else {
         alert('Något gick fel vid bokningen.');
-      });
+      }
+    } catch (err) {
+      console.error('Error creating booking:', err);
+      alert('Något gick fel vid bokningen.');
+    }
   };
     
   return (
