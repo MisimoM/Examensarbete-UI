@@ -7,6 +7,7 @@ import { Dropdown } from '@/src/app/components/ui/dropdown';
 import { useEffect, useState } from 'react';
 import { useForm } from './hooks/useForm';
 import { ButtonOrLink } from './components/ui/button';
+import { SearchListing } from '@/src/lib/services/listing/searchListing';
 
 interface Listing {
   id: string;
@@ -44,30 +45,22 @@ export default function Home() {
   };
 
   const fetchListings = async (filters: typeof formData) => {
-    try {
-      const response = await fetch("https://localhost:7186/listings/search", {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(filters),
-      });
-
-      if (!response.ok) throw new Error('Kunde inte hämta annonser.')
-      const data = await response.json()
-      setListings(data)
-    } catch (error) {
-      console.error(error)
+    const response = await SearchListing(filters);
+    if (response.success && response.data) {
+      setListings(response.data);
+    } else {
+      console.error('Kunde inte hämta annonser.', response.error);
     }
   };
 
   useEffect(() => {
-    fetchListings(formData)
-  }, [])
+    fetchListings(formData);
+  }, []);
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     handleChange(e)
   };
 
-  // Hantera formulärsökning
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     fetchListings(formData)
