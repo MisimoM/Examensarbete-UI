@@ -13,7 +13,11 @@ export default {
         foreground: "var(--foreground)",
         'primary': '#326453',
         'secondary': '#CA7373',
-        'dark-green': '#214237'
+        'dark-green': '#214237',
+        'off-white': '#F5F1EE'
+      },
+      fontFamily: {
+        figtree: ['var(--font-figtree)'],
       },
     },
   },

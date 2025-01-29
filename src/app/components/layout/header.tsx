@@ -9,16 +9,19 @@ interface HeaderProps {
 
 const Header: FC<HeaderProps> = ({ loggedIn }) => {
     return (
-        <header className="bg-white border-b-2 border-primary h-20">
+        <header className="h-20 border-b border-primary">
             <div className="container mx-auto">
-                <div className="flex justify-between items-center py-4">
-                    <div className="flex-shrink-0">
-                        <div>Logo</div>
+                <div className="flex justify-between items-center h-20">
+                    <div className="w-72 h-full">
+                        <img className="h-full max-h-full w-auto object-contain"
+                            src="https://github.com/MisimoM/Examensarbete-media/blob/main/Global/HallandLogo.png?raw=true"
+                            alt="logo"
+                            fetchPriority="high" />
                     </div>
                     <div className="flex gap-1">
                         {loggedIn ? (
                             <>
-                                <ButtonOrLink href="/profile">Profile</ButtonOrLink>
+                                <ButtonOrLink variant="secondary" href="/profile">Profile</ButtonOrLink>
                                 <ButtonOrLink>Logout</ButtonOrLink>
                             </>
                         ) : (

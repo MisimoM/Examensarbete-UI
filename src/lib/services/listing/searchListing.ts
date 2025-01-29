@@ -1,11 +1,18 @@
 export const SearchListing = async (formData: { mainLocation: string, subLocation: string, accommodationType: string }) => {
     try {
-      const response = await fetch("https://localhost:7186/listings/search", {
-        method: "POST",
+
+      const queryParams = new URLSearchParams({
+        mainLocation: formData.mainLocation,
+        subLocation: formData.subLocation,
+        accommodationType: formData.accommodationType,
+      }).toString();
+
+
+      const response = await fetch(`https://localhost:7186/listings?${queryParams}`, {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
       });
   
       if (response.ok) {

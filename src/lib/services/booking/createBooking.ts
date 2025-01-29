@@ -12,7 +12,7 @@ export async function createBooking(bookingData: { listingId: string, startDate:
   }
     
     
-  const response = await fetch('https://localhost:7186/Bookings/Create', {
+  const response = await fetch('https://localhost:7186/Bookings', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

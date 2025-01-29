@@ -1,7 +1,5 @@
 'use client'
 
-import Image from 'next/image';
-import house from "@/public/house.jpg";
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Input } from '@/src/app/components/ui/input';
@@ -9,11 +7,17 @@ import { ButtonOrLink } from '@/src/app/components/ui/button';
 import { createBooking } from '@/src/lib/services/booking/createBooking';
 import { isLoggedIn } from '@/src/lib/services/authentication/isLoggedIn';
 import { useRouter } from 'next/navigation';
+import Slideshow from '../../components/slideshow';
 
 export default function Listing() {
 
   const params = useParams()
   const router = useRouter()
+
+  interface ListingImage {
+    url: string;
+    altText: string;
+  }
 
   interface Listing {
     title: string;
@@ -21,9 +25,10 @@ export default function Listing() {
     subLocation: string;
     mainLocation: string;
     price: number;
-    accomodationType: string;
+    accommodationType: string;
     availableFrom: string;
     availableUntil: string;
+    images: ListingImage[];
   }
   
   const [listing, setListing] = useState<Listing>();
@@ -32,7 +37,7 @@ export default function Listing() {
   
   useEffect(() => {
     if (params && params.id) {
-      fetch(`https://localhost:7186/Listings/GetById/${params.id}`)
+      fetch(`https://localhost:7186/Listings/${params.id}`)
         .then((res) => res.json())
         .then((data) => setListing(data))
         .catch((err) => console.error('Error fetching listing:', err));
@@ -53,6 +58,7 @@ export default function Listing() {
   };
     
   const totalPrice = calculateDays() * pricePerNight;
+  const days = calculateDays();
 
   const handleBooking = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -94,26 +100,23 @@ export default function Listing() {
     
   return (
     <main>
-      <div className="container flex gap-4 mx-auto w-6/12 my-2">
+      <div className="container flex gap-4 mx-auto my-10">
         <div>
-          <Image className='rounded-md' src={house} alt="House" />
+        <Slideshow images={listing.images} />
           <h2>{listing.title}</h2>
           <p>{listing.description}</p>
           <p>{listing.subLocation}, {listing.mainLocation}</p>
-          <p>{listing.price}kr natt</p>
-          <p>{listing.accomodationType}</p>
-          <p>{listing.availableFrom}</p>
-          <p>{listing.availableUntil}</p>
         </div>
         <div>
           <div className='p-3 border border-primary rounded'>
             <form onSubmit={handleBooking} className='flex flex-col gap-3'>
-              <h3>Boka här</h3>
-              <div className='flex gap-2'>
+              <h3>{listing.price}kr natt</h3>
+              <div className='flex gap-2 pb-5 border-b border-dark-green'>
                 <Input label='Startdatum' name='startDate' type='date' value={startDate} onChange={(e) => setStartDate(e.target.value)} />
                 <Input label='Slutdatum' name='endDate' type='date' value={endDate} onChange={(e) => setEndDate(e.target.value)} />
               </div>
-              <h3>Totalt: {totalPrice}kr</h3>
+              <div><p>{pricePerNight}kr x {days} nätter</p></div>
+              <h5>Totalt {totalPrice}kr</h5>
               <ButtonOrLink type='submit'>Boka</ButtonOrLink>
             </form>
           </div>

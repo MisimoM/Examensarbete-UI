@@ -9,9 +9,15 @@ import { useForm } from './hooks/useForm';
 import { ButtonOrLink } from './components/ui/button';
 import { SearchListing } from '@/src/lib/services/listing/searchListing';
 
+interface ListingImage {
+  url: string;
+  altText: string;
+}
+
 interface Listing {
   id: string;
   title: string;
+  images: ListingImage[];
   mainLocation: string;
   subLocation: string;
   price: number;
@@ -101,9 +107,9 @@ export default function Home() {
             name="accommodationType"
             options={[
               { value: '', label: 'Alla boenden' },
-              { value: 'Stuga', label: 'Stuga' },
-              { value: 'Hus', label: 'Hus' },
-              { value: 'Lägenhet', label: 'Lägenhet' },
+              { value: 'Cottage', label: 'Stuga' },
+              { value: 'House', label: 'Hus' },
+              { value: 'Apartment', label: 'Lägenhet' },
             ]}
             value={formData.accommodationType}
             onChange={handleFilterChange}
@@ -119,6 +125,8 @@ export default function Home() {
                 key={listing.id}
                 Id={listing.id}
                 Title={listing.title}
+                ImageUrl={listing.images[0].url}
+                AltText={listing.images[0].altText}
                 MainLocation={listing.mainLocation}
                 SubLocation={listing.subLocation}
                 Price={listing.price}
