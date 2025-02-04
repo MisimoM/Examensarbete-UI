@@ -21,6 +21,7 @@ const Slideshow = ({ images }: { images: { url: string; altText: string }[] }) =
           src={images[currentIndex].url}
           alt={images[currentIndex].altText}
           className="w-full aspect-[4/3] object-cover object-[25%_75%]"
+          loading="lazy"
         />
       </div>
 

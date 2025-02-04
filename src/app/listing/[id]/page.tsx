@@ -5,14 +5,14 @@ import { useEffect, useState } from 'react';
 import { Input } from '@/src/app/components/ui/input';
 import { ButtonOrLink } from '@/src/app/components/ui/button';
 import { createBooking } from '@/src/lib/services/booking/createBooking';
-import { isLoggedIn } from '@/src/lib/services/authentication/isLoggedIn';
 import { useRouter } from 'next/navigation';
 import Slideshow from '../../components/slideshow';
+import { useAuth } from '@/src/app/authContext';
 
 export default function Listing() {
-
-  const params = useParams()
-  const router = useRouter()
+  const { isAuthenticated, accessToken, refreshAuth} = useAuth();
+  const params = useParams();
+  const router = useRouter();
 
   interface ListingImage {
     url: string;
@@ -30,33 +30,33 @@ export default function Listing() {
     availableUntil: string;
     images: ListingImage[];
   }
-  
+
   const [listing, setListing] = useState<Listing>();
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
-  
+
   useEffect(() => {
     if (params && params.id) {
       fetch(`https://localhost:7186/Listings/${params.id}`)
         .then((res) => res.json())
         .then((data) => setListing(data))
         .catch((err) => console.error('Error fetching listing:', err));
-      }
+    }
   }, [params]);
-  
+
   if (!listing) return <p>Loading...</p>;
 
-  const pricePerNight = listing.price
-    
+  const pricePerNight = listing.price;
+
   const calculateDays = () => {
     if (!startDate || !endDate) return 0;
     const start = new Date(startDate);
     const end = new Date(endDate);
     const differenceInTime = end.getTime() - start.getTime();
-    
+
     return differenceInTime > 0 ? differenceInTime / (1000 * 60 * 60 * 24) : 0;
   };
-    
+
   const totalPrice = calculateDays() * pricePerNight;
   const days = calculateDays();
 
@@ -64,45 +64,46 @@ export default function Listing() {
     e.preventDefault();
     if (!startDate || !endDate || !listing) return;
 
-    const loggedInStatus = await isLoggedIn();
-    if (!loggedInStatus) {
-      router.push('/login');
-      return;
+    await refreshAuth();
+
+    if (!isAuthenticated) {
+        router.push('/login');
+        return;
     }
 
     const listingId = params.id;
     
     if (typeof listingId !== 'string') {
-      console.error('Listing ID is invalid');
-      alert('Något gick fel vid bokningen.');
-      return;
+        console.error('Listing ID is invalid');
+        alert('Något gick fel vid bokningen.');
+        return;
     }
 
     const bookingData = {
-      listingId: listingId,
-      startDate: startDate,
-      endDate: endDate
+        listingId: listingId,
+        startDate: startDate,
+        endDate: endDate
     };
 
     try {
-      const response = await createBooking(bookingData);
+        const response = await createBooking(bookingData, accessToken);
 
-      if (response.ok) {
-        alert('Bokning genomförd!');
-      } else {
-        alert('Något gick fel vid bokningen.');
-      }
+        if (response.ok) {
+            alert('Bokning genomförd!');
+        } else {
+            alert('Något gick fel vid bokningen.');
+        }
     } catch (err) {
-      console.error('Error creating booking:', err);
-      alert('Något gick fel vid bokningen.');
+        console.error('Error creating booking:', err);
+        alert('Något gick fel vid bokningen.');
     }
-  };
-    
+};
+
   return (
     <main>
       <div className="container flex gap-4 mx-auto my-10">
         <div>
-        <Slideshow images={listing.images} />
+          <Slideshow images={listing.images} />
           <h2>{listing.title}</h2>
           <p>{listing.description}</p>
           <p>{listing.subLocation}, {listing.mainLocation}</p>
@@ -123,5 +124,5 @@ export default function Listing() {
         </div>
       </div>
     </main>
-  )
+  );
 }

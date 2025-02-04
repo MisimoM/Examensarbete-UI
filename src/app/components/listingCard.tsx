@@ -22,9 +22,14 @@ const ListingCard : FC<ListingCardProps> =
     Price
 }) => {
     return (
-        <div className="rounded-md p-1">
+        <div className="rounded-md">
             <Link href={`/listing/${Id}`}>
-                <img className="rounded-md w-full aspect-[4/3] object-cover object-[25%_75%]" src={ImageUrl} alt={AltText}/>
+                <img
+                    className="rounded-md w-full aspect-[4/3] object-cover object-[25%_75%]"
+                    src={ImageUrl}
+                    alt={AltText}
+                    loading="lazy"
+                />
                 <div className="mt-2">
                     <h3 className="text-lg font-semi-bold">{Title}</h3>
                     <h3 className="text-base font-semi-bold">{SubLocation}, {MainLocation}</h3>
