@@ -5,7 +5,7 @@ import '@/src/app/globals.css'
 import { ListingCard } from '@/src/app/components/listingCard';
 import { Dropdown } from '@/src/app/components/ui/dropdown';
 import { useEffect, useState } from 'react';
-import { useForm } from './hooks/useForm';
+import { useForm } from '../lib/hooks/useForm';
 import { ButtonOrLink } from './components/ui/button';
 import { SearchListing } from '@/src/lib/services/listing/searchListing';
 
@@ -73,70 +73,68 @@ export default function Home() {
   };
 
   return (
-    <main className="p-4">
-      <div className='container mx-auto'>
-        <form className="flex gap-4 mx-auto" onSubmit={handleSearch}>
-          <Dropdown
-            label="Kommun"
-            name="mainLocation"
-            options={[
-              { value: '', label: 'Alla kommuner' },
-              { value: 'Halmstads kommun', label: 'Halmstads kommun' },
-              { value: 'Varbergs kommun', label: 'Varbergs kommun' },
-              { value: 'Falkenbergs kommun', label: 'Falkenbergs kommun' },
-            ]}
-            value={formData.mainLocation}
-            onChange={handleFilterChange}
-          />
+    <div className='container mx-auto'>
+      <form className="flex gap-4 mx-auto my-3" onSubmit={handleSearch}>
+        <Dropdown
+          label="Kommun"
+          name="mainLocation"
+          options={[
+            { value: '', label: 'Alla kommuner' },
+            { value: 'Halmstads kommun', label: 'Halmstads kommun' },
+            { value: 'Varbergs kommun', label: 'Varbergs kommun' },
+            { value: 'Falkenbergs kommun', label: 'Falkenbergs kommun' },
+          ]}
+          value={formData.mainLocation}
+          onChange={handleFilterChange}
+        />
 
-          <Dropdown
-            label="Område"
-            name="subLocation"
-            options={[
-              { value: '', label: 'Alla områden' },
-              ...(formData.mainLocation && areaOptions[formData.mainLocation]
-                ? areaOptions[formData.mainLocation]
-                : []),
-            ]}
-            value={formData.subLocation}
-            onChange={handleFilterChange}
-          />
+        <Dropdown
+          label="Område"
+          name="subLocation"
+          options={[
+            { value: '', label: 'Alla områden' },
+            ...(formData.mainLocation && areaOptions[formData.mainLocation]
+              ? areaOptions[formData.mainLocation]
+              : []),
+          ]}
+          value={formData.subLocation}
+          onChange={handleFilterChange}
+        />
 
-          <Dropdown
-            label="Boende"
-            name="accommodationType"
-            options={[
-              { value: '', label: 'Alla boenden' },
-              { value: 'Cottage', label: 'Stuga' },
-              { value: 'House', label: 'Hus' },
-              { value: 'Apartment', label: 'Lägenhet' },
-            ]}
-            value={formData.accommodationType}
-            onChange={handleFilterChange}
-          />
+        <Dropdown
+          label="Boende"
+          name="accommodationType"
+          options={[
+            { value: '', label: 'Alla boenden' },
+            { value: 'Cottage', label: 'Stuga' },
+            { value: 'House', label: 'Hus' },
+            { value: 'Apartment', label: 'Lägenhet' },
+          ]}
+          value={formData.accommodationType}
+          onChange={handleFilterChange}
+        />
 
-          <ButtonOrLink type='submit'>Sök boende</ButtonOrLink>
-        </form>
+        <ButtonOrLink className='h-1/2 self-end' type='submit'>Sök boende</ButtonOrLink>
+      </form>
 
-        <section className="mt-6 grid grid-cols-4 gap-4">
-          {listings.length > 0 ? (
-            listings.map((listing) => (
-              <ListingCard
-                key={listing.id}
-                Id={listing.id}
-                Title={listing.title}
-                ImageUrl={listing.images[0].url}
-                AltText={listing.images[0].altText}
-                MainLocation={listing.mainLocation}
-                SubLocation={listing.subLocation}
-                Price={listing.price}
-              />
-            ))
-          ) : (
-            <p className="text-center">Inga annonser hittades.</p>
-          )}
-        </section>
-      </div>
-    </main> 
+      <section className="my-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
+        {listings.length > 0 ? (
+          listings.map((listing) => (
+            <ListingCard
+              key={listing.id}
+              Id={listing.id}
+              Title={listing.title}
+              ImageUrl={listing.images[0].url}
+              AltText={listing.images[0].altText}
+              MainLocation={listing.mainLocation}
+              SubLocation={listing.subLocation}
+              Price={listing.price}
+            />
+          ))
+        ) : (
+          <p className="text-center">Inga annonser hittades.</p>
+        )}
+      </section>
+    </div>
   );
 }

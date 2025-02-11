@@ -19,6 +19,17 @@ export default function Listing() {
     altText: string;
   }
 
+  interface Facility {
+    id: number;
+    name: string;
+  }
+
+  interface Host {
+    name: string;
+    email: string;
+    profileImage: string;
+  }
+
   interface Listing {
     title: string;
     description: string;
@@ -29,6 +40,8 @@ export default function Listing() {
     availableFrom: string;
     availableUntil: string;
     images: ListingImage[];
+    facilities: Facility[];
+    host: Host;
   }
 
   const [listing, setListing] = useState<Listing>();
@@ -99,30 +112,79 @@ export default function Listing() {
     }
 };
 
-  return (
-    <main>
-      <div className="container flex gap-4 mx-auto my-10">
+return (
+  <div className="container mx-auto my-10 flex-grow">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {/* Annonsinformation */}
+      <div>
+        <Slideshow images={listing.images} />
         <div>
-          <Slideshow images={listing.images} />
-          <h2>{listing.title}</h2>
-          <p>{listing.description}</p>
-          <p>{listing.subLocation}, {listing.mainLocation}</p>
+          <h2 className="text-2xl font-bold mt-4">{listing.title}</h2>
         </div>
-        <div>
-          <div className='p-3 border border-primary rounded'>
-            <form onSubmit={handleBooking} className='flex flex-col gap-3'>
-              <h3>{listing.price}kr natt</h3>
-              <div className='flex gap-2 pb-5 border-b border-dark-green'>
-                <Input label='Startdatum' name='startDate' type='date' value={startDate} onChange={(e) => setStartDate(e.target.value)} />
-                <Input label='Slutdatum' name='endDate' type='date' value={endDate} onChange={(e) => setEndDate(e.target.value)} />
-              </div>
-              <div><p>{pricePerNight}kr x {days} nätter</p></div>
-              <h5>Totalt {totalPrice}kr</h5>
-              <ButtonOrLink type='submit'>Boka</ButtonOrLink>
-            </form>
+        <p className="text-gray-700">{listing.description}</p>
+        <p className="text-gray-500">{listing.subLocation}, {listing.mainLocation}</p>
+
+        {/* Faciliteter */}
+        <div className="my-5 py-5 border-y border-gray-300">
+          <h3 className="text-lg font-semibold mb-2">Vad boendet erbjuder</h3>
+          <ul className="grid grid-cols-2 gap-2">
+            {listing.facilities.map((facility) => (
+              <li key={facility.id} className="text-gray-600">
+                ✅ {facility.name}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Värdinfo */}
+        <div className='my-5'>
+          <h3 className="text-lg font-semibold mb-2">Värden</h3>
+          <div className="flex items-center gap-4">
+            <img
+              src={listing.host.profileImage}
+              alt="Värdens profilbild"
+              className="w-16 h-16 rounded-full object-cover border border-primary"
+            />
+            <div>
+              <h3 className="text-lg font-semibold">{listing.host.name}</h3>
+              <p className="text-gray-600">{listing.host.email}</p>
+            </div>
           </div>
         </div>
       </div>
-    </main>
+
+      {/* Bokningssektion */}
+      <div>
+        <div className="p-5 border border-primary rounded">
+          <form onSubmit={handleBooking} className="flex flex-col gap-4">
+            <h3 className="text-xl font-semibold">{listing.price} kr/natt</h3>
+            <div className="flex gap-2 pb-5 border-b border-dark-green">
+              <Input
+                label="Startdatum"
+                name="startDate"
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+              />
+              <Input
+                label="Slutdatum"
+                name="endDate"
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+              />
+            </div>
+            <div>
+              <p className="text-gray-700">
+                {pricePerNight} kr x {days} nätter
+              </p>
+            </div>
+            <h5 className="text-lg font-bold">Totalt {totalPrice} kr</h5>
+            <ButtonOrLink type="submit">Boka</ButtonOrLink>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
   );
 }

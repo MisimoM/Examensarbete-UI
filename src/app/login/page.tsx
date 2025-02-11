@@ -4,7 +4,7 @@ import { Input } from "@/src/app/components/ui/input";
 import { ButtonOrLink } from "@/src/app/components/ui/button";
 import { useRouter } from 'next/navigation';
 import { LoginUser } from "@/src/lib/services/authentication/loginUser";
-import { useForm } from "@/src/app/hooks/useForm";
+import { useForm } from "@/src/lib/hooks/useForm";
 import { useAuth } from "@/src/app/authContext";
 
 export default function Login() {
