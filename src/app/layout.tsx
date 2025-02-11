@@ -17,10 +17,10 @@ export default async function RootLayout({
 
   return (
     <html lang="en" className={figtree.variable}>
-      <body className="font-figtree">
+      <body className="font-figtree flex flex-col min-h-screen">
       <AuthProvider>
         <Header />
-          {children}
+          <main className="flex-grow">{children}</main>
         <Footer />
       </AuthProvider>
       </body>

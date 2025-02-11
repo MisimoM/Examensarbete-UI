@@ -14,13 +14,13 @@ const Slideshow = ({ images }: { images: { url: string; altText: string }[] }) =
   };
 
   return (
-    <div className="relative w-full max-w-2xl mx-auto">
+    <div className="relative w-full mx-auto">
       {/* Image container */}
-      <div className="rounded-lg overflow-hidden">
+      <div className="rounded-lg overflow-hidden w-full">
         <img
           src={images[currentIndex].url}
           alt={images[currentIndex].altText}
-          className="w-full aspect-[4/3] object-cover object-[25%_75%]"
+          className="w-full h-full aspect-[4/3] object-cover object-[25%_75%]"
           loading="lazy"
         />
       </div>
@@ -28,13 +28,13 @@ const Slideshow = ({ images }: { images: { url: string; altText: string }[] }) =
       {/* Navigation buttons */}
       <button
         onClick={handlePrev}
-        className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full"
+        className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-3 rounded-full"
       >
         ◀
       </button>
       <button
         onClick={handleNext}
-        className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full"
+        className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-3 rounded-full"
       >
         ▶
       </button>
@@ -45,13 +45,13 @@ const Slideshow = ({ images }: { images: { url: string; altText: string }[] }) =
           <button
             key={index}
             onClick={() => setCurrentIndex(index)}
-            className={`w-2.5 h-2.5 rounded-full ${
+            className={`w-3 h-3 rounded-full ${
               index === currentIndex ? "bg-white" : "bg-gray-400"
             }`}
           ></button>
         ))}
       </div>
-    </div>
+  </div>
   );
 };
 
