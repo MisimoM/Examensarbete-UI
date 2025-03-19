@@ -8,7 +8,7 @@ export const SearchListing = async (formData: { mainLocation: string, subLocatio
       }).toString();
 
 
-      const response = await fetch(`https://localhost:7186/listings?${queryParams}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/listings?${queryParams}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

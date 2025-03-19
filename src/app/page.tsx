@@ -1,7 +1,5 @@
 'use client'
 
-import '@/src/app/globals.css'
-
 import { ListingCard } from '@/src/app/components/listingCard';
 import { Dropdown } from '@/src/app/components/ui/dropdown';
 import { useEffect, useState } from 'react';
@@ -25,7 +23,7 @@ interface Listing {
 
 export default function Home() {
   const { formData, handleChange } = useForm({
-    mainLocation: '' as 'Halmstads kommun' | 'Varbergs kommun' | 'Falkenbergs kommun' | '',
+    mainLocation: '' as 'Halmstads kommun' | 'Varbergs kommun' | 'Falkenbergs kommun' | 'Laholms kommun' | 'Hylte kommun' | '' ,
     subLocation: '',
     accommodationType: '',
   });
@@ -35,18 +33,25 @@ export default function Home() {
   const areaOptions = {
     'Halmstads kommun': [
       { value: 'Steninge', label: 'Steninge' },
-      { value: 'Tylösand', label: 'Tylösand' },
+      { value: 'Simlångsdalen', label: 'Simlångsdalen' },
       { value: 'Haverdal', label: 'Haverdal' },
     ],
     'Varbergs kommun': [
       { value: 'Getterön', label: 'Getterön' },
       { value: 'Apelviken', label: 'Apelviken' },
-      { value: 'Träslövsläge', label: 'Träslövsläge' }
+      { value: 'Onsala', label: 'Onsala' },
+      { value: 'Varberg stad', label: 'Varberg stad' },
     ],
     'Falkenbergs kommun': [
       { value: 'Skrea Strand', label: 'Skrea Strand' },
       { value: 'Slöinge', label: 'Slöinge' },
-      { value: 'Ullared', label: 'Ullared' }
+      { value: 'Falkenberg stad', label: 'Falkenberg stad' },
+    ],
+    'Laholms kommun': [
+      { value: 'Laholm stad', label: 'Laholm stad' },
+    ],
+    'Hylte kommun': [
+      { value: 'Unnaryd', label: 'Unnaryd' },
     ],
   };
 
@@ -83,6 +88,8 @@ export default function Home() {
             { value: 'Halmstads kommun', label: 'Halmstads kommun' },
             { value: 'Varbergs kommun', label: 'Varbergs kommun' },
             { value: 'Falkenbergs kommun', label: 'Falkenbergs kommun' },
+            { value: 'Laholms kommun', label: 'Laholms kommun' },
+            { value: 'Hylte kommun', label: 'Hylte kommun' },
           ]}
           value={formData.mainLocation}
           onChange={handleFilterChange}
@@ -106,9 +113,9 @@ export default function Home() {
           name="accommodationType"
           options={[
             { value: '', label: 'Alla boenden' },
-            { value: 'Cottage', label: 'Stuga' },
-            { value: 'House', label: 'Hus' },
-            { value: 'Apartment', label: 'Lägenhet' },
+            { value: 'Stuga', label: 'Stuga' },
+            { value: 'Hus', label: 'Hus' },
+            { value: 'Lägenhet', label: 'Lägenhet' },
           ]}
           value={formData.accommodationType}
           onChange={handleFilterChange}
