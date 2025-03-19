@@ -2,16 +2,9 @@
 
 import { FC } from "react";
 import { ButtonOrLink } from "../ui/button";
-import { useAuth } from "@/src/app/authContext";
-import { logoutUser } from "@/src/lib/services/authentication/logoutUser";
+import { getValidAccessToken } from "@/src/lib/services/authentication/getValidAccessToken"
 
 const Header: FC = () => {
-    const { isAuthenticated, user, refreshAuth } = useAuth();
-
-    const handleLogout = async () => {
-        await logoutUser();
-        refreshAuth();
-    };
 
     return (
         <header className="h-20 border-b border-primary">
@@ -27,16 +20,8 @@ const Header: FC = () => {
                         />
                     </div>
                     <div className="flex gap-1">
-                        {isAuthenticated ? (
-                            <>
-                                <ButtonOrLink variant="secondary" href="/profile">
-                                    {user?.email || "Profile"}
-                                </ButtonOrLink>
-                                <ButtonOrLink onClick={handleLogout}>Logout</ButtonOrLink>
-                            </>
-                        ) : (
-                            <ButtonOrLink href="/login">Login</ButtonOrLink>
-                        )}
+                        <ButtonOrLink href="/login">Login</ButtonOrLink>
+                        <ButtonOrLink onClick={getValidAccessToken}>Get Tokens</ButtonOrLink>
                     </div>
                 </div>
             </div>
